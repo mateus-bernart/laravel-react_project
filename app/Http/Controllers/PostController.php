@@ -42,7 +42,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return inertia('Show', ['post' => $post]);
     }
 
     /**
@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return inertia("Edit", ['post' => $post]);
     }
 
     /**
@@ -58,7 +58,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $fields = $request->validate([
+            'body' => ["required", "min: 5"]
+        ]);
+
+        $post->update($fields);
+        return redirect('/')->with('success', 'Post updated successfully');
     }
 
     /**
@@ -66,6 +71,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect('/')->with('message', 'Post deleted');
     }
 }
